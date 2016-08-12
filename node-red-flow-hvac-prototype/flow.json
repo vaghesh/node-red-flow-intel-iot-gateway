@@ -1,0 +1,167 @@
+[
+   {
+      "id":"1dc1405c.26a96",
+      "type":"mqtt-broker",
+      "z":"",
+      "broker":"localhost",
+      "port":"1883",
+      "clientid":"",
+      "usetls":false,
+      "verifyservercert":true,
+      "compatmode":true,
+      "keepalive":"60",
+      "cleansession":true,
+      "willTopic":"",
+      "willQos":"0",
+      "willRetain":null,
+      "willPayload":"",
+      "birthTopic":"",
+      "birthQos":"0",
+      "birthRetain":null,
+      "birthPayload":""
+   },
+   {
+      "id":"53e3e60c.9592e8",
+      "type":"upm-grove-temperature",
+      "z":"46f2723.4ffd08c",
+      "name":"Temp data",
+      "platform":"512",
+      "unit":"C",
+      "pin":"1",
+      "interval":1000,
+      "x":98.5,
+      "y":285,
+      "wires":[
+         [
+            "d7e6dc95.d0f6b",
+            "d24f2c8.92578d",
+            "a2e0e441.062828"
+         ]
+      ]
+   },
+   {
+      "id":"d7e6dc95.d0f6b",
+      "type":"function",
+      "z":"46f2723.4ffd08c",
+      "name":"HVAC Controller",
+      "func":"var heater\nvar fan\nvar cooler\n\nif (msg.payload > 24){\n    heater = { payload:\"0\" };\n    fan = { payload:\"0\" };\n    cooler = { payload:\"1\" };\n}\nelse if (msg.payload <= 24 & msg.payload >= 18){\n    heater = { payload:\"0\" };\n    fan = { payload:\"1\" };\n    cooler = { payload:\"0\" };\n} \nelse if (msg.payload < 18){\n    heater = {payload:\"1\"};\n    fan = { payload:\"0\" }; \n    cooler = {payload:\"0\"};\n}\n\nreturn [heater, fan, cooler];",
+      "outputs":"3",
+      "noerr":0,
+      "x":322.5,
+      "y":295,
+      "wires":[
+         [
+            "5d74062a.3e3a68"
+         ],
+         [
+            "806ab107.4a357"
+         ],
+         [
+            "d8bec5f0.6d21a8"
+         ]
+      ]
+   },
+   {
+      "id":"5d74062a.3e3a68",
+      "type":"upm-grove-led",
+      "z":"46f2723.4ffd08c",
+      "name":"Heater",
+      "platform":"512",
+      "mode":"output",
+      "pin":"2",
+      "interval":1000,
+      "x":578.5,
+      "y":241,
+      "wires":[
+
+      ]
+   },
+   {
+      "id":"d8bec5f0.6d21a8",
+      "type":"upm-grove-led",
+      "z":"46f2723.4ffd08c",
+      "name":"Cooling",
+      "platform":"512",
+      "mode":"output",
+      "pin":"4",
+      "interval":1000,
+      "x":586.5,
+      "y":357,
+      "wires":[
+
+      ]
+   },
+   {
+      "id":"d24f2c8.92578d",
+      "type":"chart tag",
+      "z":"46f2723.4ffd08c",
+      "title":"Temperature Tag",
+      "chartType":"gauge",
+      "dataSource":"Local",
+      "units":"",
+      "min":"",
+      "max":"",
+      "targetLow":"",
+      "targetHigh":"",
+      "priority":"",
+      "sourcePriority":"2",
+      "ttl":"5",
+      "points":50,
+      "x":319.5,
+      "y":181,
+      "wires":[
+         [
+            "30b1c7b6.feb008"
+         ]
+      ]
+   },
+   {
+      "id":"30b1c7b6.feb008",
+      "type":"mqtt out",
+      "z":"46f2723.4ffd08c",
+      "name":"Temeprature Chart",
+      "topic":"/sensors",
+      "qos":"",
+      "retain":"",
+      "broker":"1dc1405c.26a96",
+      "x":507.5,
+      "y":105,
+      "wires":[
+
+      ]
+   },
+   {
+      "id":"a2e0e441.062828",
+      "type":"wiotp out",
+      "z":"46f2723.4ffd08c",
+      "authType":"d",
+      "qs":"true",
+      "qsDeviceId":"a2e0e441.062828",
+      "deviceKey":"",
+      "deviceType":"",
+      "deviceId":"",
+      "event":"event",
+      "format":"json",
+      "name":"IBM Cloud",
+      "x":288.5,
+      "y":430,
+      "wires":[
+
+      ]
+   },
+   {
+      "id":"806ab107.4a357",
+      "type":"upm-grove-led",
+      "z":"46f2723.4ffd08c",
+      "name":"FAN",
+      "platform":"512",
+      "mode":"output",
+      "pin":"3",
+      "interval":1000,
+      "x":572.5,
+      "y":298,
+      "wires":[
+
+      ]
+   }
+]
